@@ -1,7 +1,7 @@
 #include "ActorManager.hpp"
 
 namespace trpg {
-	ActorManager::ActorManager() {
+	ActorManager::ActorManager(AssetManager* am) {
 		this->m_next_id = 1;
 		this->m_tileset = std::make_unique<Tileset>("assets/actors_24x24.png", 24);
 	}
@@ -16,7 +16,7 @@ namespace trpg {
 		}
 	}
 
-	void ActorManager::draw(sf::RenderWindow& rw) {
+	void ActorManager::draw(sf::RenderWindow* rw) {
 		for (auto& kvp : this->m_actors) {
 			kvp.second->draw(rw);
 		}

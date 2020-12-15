@@ -15,8 +15,8 @@ namespace trpg {
 
 		// setup the sprite
 		this->m_sprite.setPosition((float)(this->m_tile_x * this->m_size), (float)(this->m_tile_x * this->m_size));
-		this->m_sprite.setTexture(tileset.get_texture());
-		this->m_sprite.setTextureRect(tileset.get_rect(this->m_graphics_id));
+		this->m_sprite.setTexture(*(tileset.get_texture()));
+		this->m_sprite.setTextureRect(*(tileset.get_rect(this->m_graphics_id)));
 		this->m_sprite.setScale(
 			(float)size / tileset.get_tilesize(),
 			(float)size / tileset.get_tilesize()
@@ -24,7 +24,7 @@ namespace trpg {
 
 		// setup the stats
 		std::memset(&this->m_stats, sizeof(this->m_stats), 0);
-		this->m_stats.m_speed = rand() % 500 + 500;
+		this->m_stats.m_speed = rand() % 500 + 1000;
 		this->m_stats.m_speed_counter = 0;
 	}
 
@@ -52,8 +52,8 @@ namespace trpg {
 		}
 	}
 
-	void Actor::draw(sf::RenderWindow& rw) {
-		rw.draw(this->m_sprite);
+	void Actor::draw(sf::RenderWindow* rw) {
+		rw->draw(this->m_sprite);
 	}
 
 	unsigned long Actor::get_id() const {

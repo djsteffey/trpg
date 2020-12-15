@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include "Tileset.hpp"
+#include "AssetManager.hpp"
 
 namespace trpg {
 	class TilemapTile {
@@ -20,11 +21,11 @@ namespace trpg {
 
 	class Tilemap {
 	public:
-		Tilemap(int width, int height, int tilesize);
+		Tilemap(AssetManager* am, int width, int height, int tilesize);
 		~Tilemap();
-		void update(int ms);
-		void draw(sf::RenderWindow& rw);
-		bool is_valid_tile_position(int tile_x, int tile_y);
+		void update(int ms) const;
+		void draw(sf::RenderWindow* rw);
+		bool is_valid_tile_position(int tile_x, int tile_y) const;
 
 	protected:
 

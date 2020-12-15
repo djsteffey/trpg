@@ -58,7 +58,7 @@ namespace trpg {
 		this->m_render_window.clear();
 
 		// draw stuff
-		this->m_screen->draw(this->m_render_window);
+		this->m_screen->draw(&(this->m_render_window));
 
 		// present
 		this->m_render_window.display();

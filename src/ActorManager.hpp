@@ -6,14 +6,15 @@
 #include <map>
 #include <memory>
 #include "Actor.hpp"
+#include "AssetManager.hpp"
 
 namespace trpg {
 	class ActorManager {
 	public:
-		ActorManager();
+		ActorManager(AssetManager* am);
 		~ActorManager();
 		void update(int ms, Tilemap& tilemap);
-		void draw(sf::RenderWindow& rw);
+		void draw(sf::RenderWindow* rw);
 		unsigned long add_actor(int graphics_id, int size);
 		Actor* get_actor(unsigned long id);
 
