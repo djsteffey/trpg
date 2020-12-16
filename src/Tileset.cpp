@@ -1,12 +1,27 @@
 #include "Tileset.hpp"
+#include "AssetManager.hpp"
+#include "misc.hpp"
 
 namespace trpg {
-	Tileset::Tileset(AssetManager* am, std::string filename, int tilesize) {
+	Tileset::Tileset() {
+		this->m_tilesize = -1;
+		this->m_texture = nullptr;
+	}
+
+	Tileset::~Tileset() {
+
+	}
+
+	bool Tileset::init(AssetManager* am, std::string filename, int tilesize) {
 		// size
 		this->m_tilesize = tilesize;
 
 		// load the texture
 		this->m_texture = am->get_texture(filename);
+		if (this->m_texture == nullptr) {
+			misc::log("Tileset::init()", "error getting texture %s", filename.c_str());
+			return false;
+		}
 
 		// create the rects
 		for (unsigned int y = 0; y < this->m_texture->getSize().y; y += this->m_tilesize) {
@@ -14,10 +29,9 @@ namespace trpg {
 				this->m_rects.push_back(sf::IntRect(x, y, this->m_tilesize, this->m_tilesize));
 			}
 		}
-	}
 
-	Tileset::~Tileset() {
-
+		// done
+		return true;
 	}
 
 	const sf::Texture* Tileset::get_texture() const {

@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "ScreenBattle.hpp"
+#include "misc.hpp"
 
 namespace trpg {
 	Game::Game() {
@@ -20,6 +21,10 @@ namespace trpg {
 
 		// init
 		this->m_screen = std::make_unique<ScreenBattle>();
+		if (this->m_screen->init() == false) {
+			misc::log("Game::init()", "error init screen");
+			return;
+		}
 
 		// loop while the window is open
 		while (this->m_render_window.isOpen()){

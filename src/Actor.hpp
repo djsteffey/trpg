@@ -17,14 +17,17 @@ namespace trpg {
 
 	class Actor {
 	public:
-		Actor(unsigned long id, int graphics_id, int size, const Tileset& tileset);
+		Actor();
 		~Actor();
+		bool init(unsigned long id, int graphics_id, int size, const Tileset* tileset);
 		void update(int ms, Tilemap& tilemap, ActorManager& am);
 		void draw(sf::RenderWindow* rw);
 		unsigned long get_id() const;
-		void set_tile_position(int tile_x, int tile_y);
+		void set_tile_position(int tile_x, int tile_y, bool set_sprite_position);
 		void set_sprite_position(float x, float y);
 		void ai(Tilemap& tilemap, ActorManager& am);
+		int get_tile_position_x() const;
+		int get_tile_position_y() const;
 
 	protected:
 

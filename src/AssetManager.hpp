@@ -12,6 +12,7 @@ namespace trpg {
 	public:
 		AssetManager();
 		~AssetManager();
+		bool init();
 		bool load_texture(std::string filename);
 		const sf::Texture* get_texture(std::string filename);
 		bool load_tileset(std::string filename, int tilesize);
@@ -21,7 +22,7 @@ namespace trpg {
 
 	private:
 		std::map<std::string, std::unique_ptr<sf::Texture>> m_textures;
-		std::map<std::string, std::unique_ptr<Tileset>> m_tileset;
+		std::map<std::string, std::unique_ptr<Tileset>> m_tilesets;
 	};
 }
 #endif

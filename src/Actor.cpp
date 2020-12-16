@@ -3,7 +3,20 @@
 #include "Tilemap.hpp"
 
 namespace trpg {
-	Actor::Actor(unsigned long id, int graphics_id, int size, const Tileset& tileset) {
+	Actor::Actor() {
+		this->m_id = -1;
+		this->m_graphics_id = -1;
+		this->m_size = -1;
+		this->m_tile_x = -1;
+		this->m_tile_y = -1;
+		std::memset(&this->m_stats, sizeof(this->m_stats), 0);
+	}
+
+	Actor::~Actor() {
+
+	}
+
+	bool Actor::init(unsigned long id, int graphics_id, int size, const Tileset* tileset) {
 		// actor id and graphics and size
 		this->m_id = id;
 		this->m_graphics_id = graphics_id;
@@ -15,21 +28,20 @@ namespace trpg {
 
 		// setup the sprite
 		this->m_sprite.setPosition((float)(this->m_tile_x * this->m_size), (float)(this->m_tile_x * this->m_size));
-		this->m_sprite.setTexture(*(tileset.get_texture()));
-		this->m_sprite.setTextureRect(*(tileset.get_rect(this->m_graphics_id)));
+		this->m_sprite.setTexture(*(tileset->get_texture()));
+		this->m_sprite.setTextureRect(*(tileset->get_rect(this->m_graphics_id)));
 		this->m_sprite.setScale(
-			(float)size / tileset.get_tilesize(),
-			(float)size / tileset.get_tilesize()
+			(float)size / tileset->get_tilesize(),
+			(float)size / tileset->get_tilesize()
 		);
 
 		// setup the stats
 		std::memset(&this->m_stats, sizeof(this->m_stats), 0);
 		this->m_stats.m_speed = rand() % 500 + 1000;
 		this->m_stats.m_speed_counter = 0;
-	}
 
-	Actor::~Actor() {
-
+		// done
+		return true;
 	}
 
 	void Actor::update(int ms, Tilemap& tilemap, ActorManager& am) {
@@ -60,28 +72,38 @@ namespace trpg {
 		return this->m_id;
 	}
 
-	void Actor::set_tile_position(int tile_x, int tile_y) {
+	void Actor::set_tile_position(int tile_x, int tile_y, bool set_sprite_position) {
 		this->m_tile_x = tile_x;
 		this->m_tile_y = tile_y;
-//		this->m_sprite.setPosition((float)(this->m_tile_x * this->m_size), (float)(this->m_tile_y * this->m_size));
+		if (set_sprite_position) {
+			this->m_sprite.setPosition((float)(this->m_tile_x * this->m_size), (float)(this->m_tile_y * this->m_size));
+		}
 	}
 
 	void Actor::set_sprite_position(float x, float y) {
 		this->m_sprite.setPosition(x, y);
 	}
 
+	int Actor::get_tile_position_x() const {
+		return this->m_tile_x;
+	}
+
+	int Actor::get_tile_position_y() const {
+		return this->m_tile_y;
+	}
+
 	void Actor::ai(Tilemap& tilemap, ActorManager& am) {
 		// just move
-		EDirection dir = random_direction();
-		sf::Vector2i vec = direction_to_vector(dir);
+		misc::EDirection dir = misc::random_direction();
+		sf::Vector2i vec = misc::direction_to_vector(dir);
 		int new_x = this->m_tile_x + vec.x;
 		int new_y = this->m_tile_y + vec.y;
 		if (tilemap.is_valid_tile_position(new_x, new_y)) {
-			this->set_tile_position(new_x, new_y);
+			this->set_tile_position(new_x, new_y, false);
 			this->m_actions.push_back(
 				std::make_unique<ActionMoveTo>(
 					this,
-					250,
+					150,
 					this->m_sprite.getPosition(),
 					sf::Vector2f((float)(this->m_tile_x * this->m_size), (float)(this->m_tile_y * this->m_size))
 					)

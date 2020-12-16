@@ -12,6 +12,7 @@ namespace trpg {
 	public:
 		ScreenBattle();
 		~ScreenBattle();
+		bool init() override;
 		void update(int ms) override;
 		void draw(sf::RenderWindow* rw) override;
 

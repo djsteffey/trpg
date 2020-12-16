@@ -4,15 +4,19 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include "AssetManager.hpp"
 
 namespace trpg {
+	class AssetManager;
+
 	class Tileset {
 	public:
-		Tileset(AssetManager* am, std::string filename, int tilesize);
+		Tileset();
 		~Tileset();
+
+		bool init(AssetManager* am, std::string filename, int tilesize);
 		const sf::Texture* get_texture() const;
 		const sf::IntRect* get_rect(int index) const;
+
 		int get_tilesize() const;
 
 	protected:

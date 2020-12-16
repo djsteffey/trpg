@@ -3,10 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include "Tileset.hpp"
-#include "AssetManager.hpp"
 
 namespace trpg {
+	class AssetManager;
+	class Tileset;
+
 	class TilemapTile {
 	public:
 		TilemapTile(int graphics_id);
@@ -21,8 +22,10 @@ namespace trpg {
 
 	class Tilemap {
 	public:
-		Tilemap(AssetManager* am, int width, int height, int tilesize);
+		Tilemap();
 		~Tilemap();
+
+		bool init(AssetManager* am, int width, int height, int tilesize);
 		void update(int ms) const;
 		void draw(sf::RenderWindow* rw);
 		bool is_valid_tile_position(int tile_x, int tile_y) const;
@@ -36,7 +39,7 @@ namespace trpg {
 		int m_height;
 		int m_tilesize;
 		sf::VertexArray m_vertex_array;
-		std::unique_ptr<Tileset> m_tileset;
+		const Tileset* m_tileset;
 		bool m_dirty;
 		std::vector<std::vector<TilemapTile>> m_tiles;
 	};

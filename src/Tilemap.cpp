@@ -1,4 +1,6 @@
 #include "Tilemap.hpp"
+#include "AssetManager.hpp"
+#include "misc.hpp"
 
 namespace trpg {
 	TilemapTile::TilemapTile(int graphics_id) {
@@ -13,14 +15,30 @@ namespace trpg {
 		return this->m_graphics_id;
 	}
 
-	Tilemap::Tilemap(int width, int height, int tilesize) {
+	Tilemap::Tilemap() {
+		this->m_width = -1;
+		this->m_height = -1;
+		this->m_tilesize = -1;
+		this->m_dirty = false;
+		this->m_tileset = nullptr;
+	}
+
+	Tilemap::~Tilemap() {
+
+	}
+
+	bool Tilemap::init(AssetManager* am, int width, int height, int tilesize) {
 		// save size
 		this->m_width = width;
 		this->m_height = height;
 		this->m_tilesize = tilesize;
 
-		// create the tileset
-		this->m_tileset = std::make_unique<Tileset>("assets/tiles_24x24.png", 24);
+		// load tileset
+		this->m_tileset = am->get_tileset("assets/tiles_24x24.png");
+		if (this->m_tileset == nullptr) {
+			misc::log("Tilemap::init()", "error getting tileset %s", "assets/tiles_24x24.png");
+			return false;
+		}
 
 		// create the tiles
 		this->m_tiles.resize(this->m_width);
@@ -38,10 +56,9 @@ namespace trpg {
 		// mark as dirty and update the vertex array
 		this->m_dirty = true;
 		this->update_vertex_array();
-	}
 
-	Tilemap::~Tilemap() {
-
+		// done
+		return true;
 	}
 
 	void Tilemap::update(int ms) const {
