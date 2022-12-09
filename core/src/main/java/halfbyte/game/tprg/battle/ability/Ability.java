@@ -23,12 +23,14 @@ public abstract class Ability {
     // variables
     private String m_name;
     private int m_cost;
+    protected int m_range;
     protected Entity m_owner;
 
     // methods
-    public Ability(String name, int cost, Entity owner){
+    public Ability(String name, int cost, int range, Entity owner){
         this.m_name = name;
         this.m_cost = cost;
+        this.m_range = range;
         this.m_owner = owner;
     }
 

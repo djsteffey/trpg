@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import halfbyte.game.tprg.battle.Entity;
+
 public class Utils {
     // random
     private static final Random s_random = new Random();
@@ -122,6 +124,11 @@ public class Utils {
             dir = dir.nor();
         }
         return dir;
+    }
+    public static int manhattanDistance(Entity a, Entity b){
+        int dx = Math.abs(a.getTileX() - b.getTileX());
+        int dy = Math.abs(a.getTileY() - b.getTileY());
+        return dx + dy;
     }
 
     // misc

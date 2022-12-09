@@ -3,7 +3,6 @@ package halfbyte.game.tprg.battle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import java.util.ArrayList;
 import java.util.List;
 import halfbyte.game.tprg.Utils;
@@ -25,7 +24,8 @@ public class Battle extends Group {
         for (int i = 0; i < 10; ++i){
             Entity entity = new Entity(
                     Utils.randomInt(1, this.m_tilemap.getTilesWide() - 1),
-                    Utils.randomInt(1, this.m_tilemap.getTilesHigh() - 1)
+                    Utils.randomInt(1, this.m_tilemap.getTilesHigh() - 1),
+                    i % 2
             );
             this.m_entities.add(entity);
             this.addActor(entity);
@@ -43,6 +43,10 @@ public class Battle extends Group {
 
     public Tilemap getTilemap(){
         return this.m_tilemap;
+    }
+
+    public List<Entity> getEntities(){
+        return this.m_entities;
     }
 
     public boolean getIsTileWalkable(Entity entity, int tileX, int tileY){
@@ -74,6 +78,23 @@ public class Battle extends Group {
         return null;
     }
 
+    private void doEndOfTurn(){
+        // remove dead entities from stage
+        for (Entity entity : this.m_entities){
+            if (entity.getIsAlive() == false){
+                entity.remove();
+            }
+        }
+
+        // remove dead entities from list
+        this.m_entities.removeIf(entity-> entity.getIsAlive() == false);
+
+        // todo check end of battle
+
+        // next turn
+        this.doNextTurn();
+    }
+
     private void doNextTurn(){
         // increment turn index
         this.m_turnIndex = (this.m_turnIndex + 1) % this.m_entities.size();
@@ -92,7 +113,7 @@ public class Battle extends Group {
                     new Action() {
                         @Override
                         public boolean act(float delta) {
-                            Battle.this.doNextTurn();
+                            Battle.this.doEndOfTurn();
                             return true;
                         }
                     }

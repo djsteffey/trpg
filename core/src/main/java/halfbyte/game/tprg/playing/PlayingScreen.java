@@ -19,7 +19,7 @@ public class PlayingScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        delta *= 4;
+        delta *= 2;
 
         // super render
         super.render(delta);
